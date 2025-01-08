@@ -4,7 +4,7 @@ import { PostSearchableFields } from './post.constant';
 import { TPost } from './post.interface';
 import { Post } from './post.model';
 import AppError from '../../errors/AppError';
-import { Notification } from '../notification/notification.model';
+// import { Notification } from '../notification/notification.model';
 
 const createPostIntoDB = async (payload: TPost) => {
   const session = await mongoose.startSession();
@@ -21,16 +21,37 @@ const createPostIntoDB = async (payload: TPost) => {
     }
 
     if (result) {
-      const createNotification = await Notification.create([
-        {
-          headLine: payload.headLine,
-          postId: result[0]._id,
-        },
-      ]);
+      //
+      const notificationPayload = {
+        headLine: payload.headLine,
+        postId: result[0]._id,
+      };
 
-      if (!createNotification) {
+      const response = await axios.post(
+        'http://localhost:5000/api/v1/notification/create-Notification', 
+        notificationPayload,
+        {
+          headers: {
+            'x-api-key': process.env.NOTIFICATION_SERVICE_API_KEY,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.status !== 201) {
         throw new AppError(400, 'Failed to create notification');
       }
+
+      // const createNotification = await Notification.create([
+      //   {
+      //     headLine: payload.headLine,
+      //     postId: result[0]._id,
+      //   },
+      // ]);
+
+      // if (!createNotification) {
+      //   throw new AppError(400, 'Failed to create notification');
+      // }
     }
 
     await session.commitTransaction();

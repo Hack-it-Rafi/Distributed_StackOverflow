@@ -4,12 +4,19 @@ import jwt, { JwtPayload, TokenExpiredError } from 'jsonwebtoken';
 import config from '../config';
 import AppError from '../errors/AppError';
 import catchAsync from '../utils/catchAsync';
-import { User } from '../modules/user/user.model';
+// import { User } from '../modules/user/user.model';
 
 // const auth = (...requiredRoles: TUserRole[]) => {
 const auth = () => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(' ')[1];
+    const apiKey = req.headers['x-api-key'];
+
+    // Check for API key
+    if (apiKey && apiKey === config.NOTIFICATION_SERVICE_API_KEY) {
+      return next();
+    }
+
     if (!token) {
       throw new AppError(401, 'You are not authorized!');
     }
@@ -22,7 +29,19 @@ const auth = () => {
 
       const { userEmail } = decoded;
 
-      const user = await User.findOne({ email: userEmail });
+      // const user = await User.findOne({ email: userEmail });
+
+
+      const userServiceUrl = `http://localhost:5000/api/v1/user?email=${userEmail}`;
+      const userResponse = await axios.get(userServiceUrl, {
+        headers: {
+          'x-api-key': config.USER_SERVICE_API_KEY,
+          'Content-Type': 'application/json',
+        }
+      });
+      const user = userResponse.data;
+
+
       if (!user) {
         throw new AppError(401, 'User not found!');
       }
