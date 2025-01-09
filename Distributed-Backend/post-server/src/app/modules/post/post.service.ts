@@ -28,7 +28,7 @@ const createPostIntoDB = async (payload: TPost) => {
       };
 
       const response = await axios.post(
-        'http://localhost:5000/api/v1/notification/create-Notification', 
+        'http://localhost:5003/api/v1/notification/create-Notification', 
         notificationPayload,
         {
           headers: {

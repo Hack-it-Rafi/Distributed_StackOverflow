@@ -32,7 +32,7 @@ const auth = () => {
       // const user = await User.findOne({ email: userEmail });
 
 
-      const userServiceUrl = `http://localhost:5000/api/v1/user?email=${userEmail}`;
+      const userServiceUrl = `http://localhost:5001/api/v1/user?email=${userEmail}`;
       const userResponse = await axios.get(userServiceUrl, {
         headers: {
           'x-api-key': config.USER_SERVICE_API_KEY,
@@ -42,7 +42,7 @@ const auth = () => {
       const user = userResponse.data;
 
 
-      
+
       if (!user) {
         throw new AppError(401, 'User not found!');
       }
