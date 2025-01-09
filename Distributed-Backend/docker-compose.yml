@@ -15,8 +15,13 @@ services:
       - "5002:5002"
     environment:
       - DB_URI=mongodb://post-db:27017/postdb
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_ACCESS_KEY=rootadmin
+      - MINIO_SECRET_KEY=rootadmin
+      # - MINIO_BUCKET_NAME=post-service-bucket
     depends_on:
       - post-db
+      - minio
 
   notification-service:
     build: ./notification-server
@@ -38,6 +43,20 @@ services:
       - user-service
       - post-service
       - notification-service
+
+  # MinIO for object storage
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    command: server /data
+    ports:
+      - "9000:9000"
+      - "9001:9001" 
+    environment:
+      - MINIO_ROOT_USER=rootadmin
+      - MINIO_ROOT_PASSWORD=rootadmin
+    volumes:
+      - minio-data:/data
 
   # Separate MongoDB containers for each service
   user-db:
@@ -68,3 +87,4 @@ volumes:
   user-data:
   post-data:
   notif-data:
+  minio-data:

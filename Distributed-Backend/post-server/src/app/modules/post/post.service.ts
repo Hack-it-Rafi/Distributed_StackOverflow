@@ -4,6 +4,7 @@ import { PostSearchableFields } from './post.constant';
 import { TPost } from './post.interface';
 import { Post } from './post.model';
 import AppError from '../../errors/AppError';
+import axios from 'axios';
 // import { Notification } from '../notification/notification.model';
 
 const createPostIntoDB = async (payload: TPost) => {

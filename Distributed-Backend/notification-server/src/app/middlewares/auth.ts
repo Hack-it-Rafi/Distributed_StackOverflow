@@ -4,6 +4,7 @@ import jwt, { JwtPayload, TokenExpiredError } from 'jsonwebtoken';
 import config from '../config';
 import AppError from '../errors/AppError';
 import catchAsync from '../utils/catchAsync';
+import axios from 'axios';
 // import { User } from '../modules/user/user.model';
 
 // const auth = (...requiredRoles: TUserRole[]) => {

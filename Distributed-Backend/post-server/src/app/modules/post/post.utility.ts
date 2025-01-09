@@ -5,11 +5,22 @@ const minioClient = new Minio.Client({
   endPoint: '127.0.0.1',
   port: 9000,
   useSSL: false, //  HTTPS
-  accessKey: process.env.MinIO_ACCESS_KEY,
-  secretKey: process.env.MinIO_SECRET_KEY,
+  accessKey: process.env.MinIO_ACCESS_KEY as string,
+  secretKey: process.env.MinIO_SECRET_KEY as string,
 });
 
-export const uploadToMinIO = async (bucketName, file) => {
+interface File {
+  originalname: string;
+  buffer: Buffer;
+  size: number;
+}
+
+interface ObjectInfo {
+  etag: string;
+  versionId: string;
+}
+
+export const uploadToMinIO = async (bucketName: string, file: File): Promise<ObjectInfo> => {
   const bucketExists = await minioClient.bucketExists(bucketName);
   if (!bucketExists) {
     await minioClient.makeBucket(bucketName, 'us-east-1'); 
@@ -21,11 +32,11 @@ export const uploadToMinIO = async (bucketName, file) => {
       file.originalname,
       file.buffer,
       file.size,              
-      (err, objInfo) => {
+      (err: Error | null, objInfo: Minio.ItemBucketMetadata) => {
         if (err) {
           reject(err);
         } else {
-          resolve(objInfo);
+          resolve(objInfo as ObjectInfo);
         }
       }
     );
@@ -33,7 +44,10 @@ export const uploadToMinIO = async (bucketName, file) => {
 };
 
 
-export const getObjectFromMinIO = async (bucketName, filename) => {
+export const getObjectFromMinIO = async (
+  bucketName: string,
+  filename: string
+): Promise<string> => {
   try {
     const dataStream = await minioClient.getObject(bucketName, filename);
     
