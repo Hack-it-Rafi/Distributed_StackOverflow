@@ -14,7 +14,7 @@ const auth = () => {
     const apiKey = req.headers['x-api-key'];
 
     // Check for API key
-    if (apiKey && apiKey === config.NOTIFICATION_SERVICE_API_KEY) {
+    if (apiKey && apiKey === config.POST_SERVICE_API_KEY) {
       return next();
     }
 

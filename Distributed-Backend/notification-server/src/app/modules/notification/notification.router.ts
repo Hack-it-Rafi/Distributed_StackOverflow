@@ -26,6 +26,8 @@ router.patch(
 // router.delete('/:id', auth('admin'), NotificationControllers.deleteNotification);
 
 
-router.get('/', auth(), NotificationControllers.getAllNotifications);
+router.get('/', 
+  auth(), 
+  NotificationControllers.getAllNotifications);
 
 export const NotificationRoutes = router;

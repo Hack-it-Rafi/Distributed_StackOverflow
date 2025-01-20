@@ -11,7 +11,6 @@ const notificationSchema = new Schema<TNotification>(
     },
     postId: {
       type: Schema.Types.ObjectId,
-      ref: 'Post',
       trim: true,
       required: true,
     },

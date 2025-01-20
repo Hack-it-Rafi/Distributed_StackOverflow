@@ -34,7 +34,6 @@ const postSchema = new Schema<TPost>(
     // },
     userId: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
       trim: true,
       required: true,
     },

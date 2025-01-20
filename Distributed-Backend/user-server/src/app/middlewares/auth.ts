@@ -10,6 +10,13 @@ import { User } from '../modules/user/user.model';
 const auth = () => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(' ')[1];
+    const apiKey = req.headers['x-api-key'];
+
+    // Check for API key
+    if (apiKey && apiKey === config.USER_SERVICE_API_KEY) {
+      return next();
+    }
+
     if (!token) {
       throw new AppError(401, 'You are not authorized!');
     }
