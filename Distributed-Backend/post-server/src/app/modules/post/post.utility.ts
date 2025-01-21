@@ -1,4 +1,5 @@
 import * as Minio from 'minio';
+import { Buffer } from 'buffer';
 
 // Initialize 
 const minioClient = new Minio.Client({
