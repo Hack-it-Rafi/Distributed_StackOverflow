@@ -101,7 +101,7 @@ import config from '../../config';
 const fetchUserDetails = async (userId: string) => {
   try {
     const response = await axios.get(
-      `http://localhost:5001/api/v1/user/${userId}`,
+      `http://user-service:5001/api/v1/user/${userId}`,
       {
         headers: {
           'x-api-key': config.USER_SERVICE_API_KEY,
@@ -119,12 +119,12 @@ const createPostIntoDB = async (payload: TPost) => {
   const session = await mongoose.startSession();
 
   try {
-    session.startTransaction();
+    // session.startTransaction();
 
     const result = await Post.create([payload], { session });
 
     if (!result) {
-      throw new AppError(400, 'Failed to create post');
+      throw new AppError(400, 'Failed to create post before creating notification');
     }
 
     if (result) {
@@ -134,7 +134,7 @@ const createPostIntoDB = async (payload: TPost) => {
       };
 
       const response = await axios.post(
-        'http://localhost:5003/api/v1/notification/create-Notification',
+        'http://notification-service:5003/api/v1/notification/create-Notification',
         notificationPayload,
         {
           headers: {
@@ -144,19 +144,19 @@ const createPostIntoDB = async (payload: TPost) => {
         }
       );
 
-      if (response.status !== 201) {
+      if (response.status !== 200) {
         throw new AppError(400, 'Failed to create notification');
       }
     }
 
-    await session.commitTransaction();
-    await session.endSession();
+    // await session.commitTransaction();
+    // await session.endSession();
 
     return result[0];
   } catch (err) {
-    await session.abortTransaction();
-    await session.endSession();
-    throw new AppError(400, 'Failed to create post');
+    // await session.abortTransaction();
+    // await session.endSession();
+    throw new AppError(400, err instanceof Error ? err.message : 'Unknown error');
   }
 };
 

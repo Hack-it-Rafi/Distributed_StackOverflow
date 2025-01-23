@@ -62,7 +62,7 @@ import config from '../../config';
 const fetchPostDetails = async (postId: string) => {
   try {
     const response = await axios.get(
-      `http://localhost:5002/api/v1/post/${postId}`,
+      `http://post-service:5002/api/v1/post/${postId}`,
       {
         headers: {
           'x-api-key': config.POST_SERVICE_API_KEY,

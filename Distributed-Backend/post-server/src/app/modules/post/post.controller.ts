@@ -34,7 +34,7 @@ const createPost = catchAsync(async (req, res) => {
       data: result,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'File upload failed' });
+    res.status(500).json({ success: false, message: "My "+error });
   }
 });
 

@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-// import httpStatus from 'http-status';
 import jwt, { JwtPayload, TokenExpiredError } from 'jsonwebtoken';
 import config from '../config';
 import AppError from '../errors/AppError';
@@ -11,6 +10,7 @@ const auth = () => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(' ')[1];
     const apiKey = req.headers['x-api-key'];
+
 
     // Check for API key
     if (apiKey && apiKey === config.USER_SERVICE_API_KEY) {
@@ -29,14 +29,15 @@ const auth = () => {
 
       const { userEmail } = decoded;
 
+      // console.log("decoded",decoded);
+      // console.log("mail",userEmail);
+
       const user = await User.findOne({ email: userEmail });
       if (!user) {
         throw new AppError(401, 'User not found!');
       }
 
-      // if (requiredRoles.length && !requiredRoles.includes(user.role)) {
-      //   throw new AppError(403, 'You are not authorized!');
-      // }
+      // console.log("user",user);
 
       req.user = user;
 

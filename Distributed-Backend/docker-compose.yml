@@ -4,8 +4,8 @@ services:
     build: ./user-server
     ports:
       - "5001:5001"
-    environment:
-      - DB_URI=mongodb://user-db:27017/userdb
+    # environment:
+      # - DB_URI=mongodb://user-db:27017/userdb
     depends_on:
       - user-db
 
@@ -13,24 +13,28 @@ services:
     build: ./post-server
     ports:
       - "5002:5002"
-    environment:
-      - DB_URI=mongodb://post-db:27017/postdb
-      - MINIO_ENDPOINT=http://minio:9000
-      - MINIO_ACCESS_KEY=rootadmin
-      - MINIO_SECRET_KEY=rootadmin
+    # environment:
+      # - DB_URI=mongodb://post-db:27017/postdb
+      # - MINIO_ENDPOINT=http://minio:9000
+      # - MINIO_ACCESS_KEY=rootadmin
+      # - MINIO_SECRET_KEY=rootadmin
       # - MINIO_BUCKET_NAME=post-service-bucket
     depends_on:
       - post-db
       - minio
+      - notif-db
+      - user-db
 
   notification-service:
     build: ./notification-server
     ports:
       - "5003:5003"
-    environment:
-      - DB_URI=mongodb://notif-db:27017/notifdb
+    # environment:
+      # - DB_URI=mongodb://notif-db:27017/notifdb
     depends_on:
       - notif-db
+      - user-db
+      - post-db
 
   reverse-proxy:
     image: nginx:alpine
@@ -48,7 +52,7 @@ services:
   minio:
     image: minio/minio:latest
     container_name: minio
-    command: server /data
+    command: server /data --console-address ":9001"
     ports:
       - "9000:9000"
       - "9001:9001" 

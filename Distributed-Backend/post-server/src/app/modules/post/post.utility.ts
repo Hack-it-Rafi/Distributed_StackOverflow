@@ -3,7 +3,7 @@ import { Buffer } from 'buffer';
 
 // Initialize 
 const minioClient = new Minio.Client({
-  endPoint: '127.0.0.1',
+  endPoint: 'minio',
   port: 9000,
   useSSL: false, //  HTTPS
   accessKey: process.env.MinIO_ACCESS_KEY as string,

@@ -9,8 +9,8 @@ import cookieParser from 'cookie-parser';
 // import smsRouter from './sms/smsRoutes';
 
 const corsOptions = {
-  // origin: ['http://localhost:5173', 'http://10.100.202.96:5173/'],
-  origin: true,
+  origin: ['http://localhost:5173', 'http://localhost:5003', 'http://localhost:5002', 'http://localhost:5001', 'http://localhost:5000',],
+  // origin: true,
   credentials: true,
 };
 
@@ -18,7 +18,6 @@ const corsOptions = {
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());
-// app.use('/api/v1/sms', smsRouter);
 
 // application routes
 app.use('/api/v1', router);
