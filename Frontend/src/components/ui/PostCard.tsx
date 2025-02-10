@@ -1,13 +1,22 @@
 import { useNavigate } from "react-router-dom";
 
-const PostCard = ({ item }) => {
+interface PostItem {
+  content: string;
+  _id: string;
+  createdAt: string;
+  headLine: string;
+  userEmail: string;
+  userId: string;
+}
+
+const PostCard = ({ item }: { item: PostItem }) => {
   const navigate = useNavigate();
 
-  const handlePostRedirect = (id) => {
+  const handlePostRedirect = (id:string) => {
     navigate(`/post/${id}`);
   };
 
-  const { content, _id, createdAt, headLine, userEmail, userId } = item;
+  const { content, _id, createdAt, headLine, userEmail} = item;
   
   return (
     <div

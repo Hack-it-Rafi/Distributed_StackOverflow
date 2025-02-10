@@ -58,9 +58,9 @@ const Home = () => {
       </div>
       <div className="flex flex-col gap-10 max-w-4xl mx-auto">
         {data?.data?.filter(
-            (item) =>
+            (item: { userEmail: string }) =>
               item.userEmail!==user?.userEmail
-          ).map((item) => (
+          ).map((item: { _id: string }) => (
           <PostCard key={item._id} item={item}></PostCard>
         ))}
       </div>

@@ -9,7 +9,7 @@ const PostDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const parseFileUrl = (fileUrl) => {
+  const parseFileUrl = (fileUrl:string) => {
     try {
       const parts = fileUrl?.split("/").filter(Boolean);
       if (!parts || parts.length < 2) {
@@ -19,20 +19,24 @@ const PostDetails = () => {
       const fileName = parts[1];
       return { bucketName, fileName };
     } catch (error) {
-      console.error(error.message);
+      if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.error("An unknown error occurred.");
+      }
       return null;
     }
   };
 
-  const { data } = useGetSinglePostQuery(id);
-  const { content, _id, createdAt, headLine, userEmail, userId } =
+  const { data } = useGetSinglePostQuery(id?id:"");
+  const { content, createdAt, headLine, userEmail } =
     data?.data || {};
   const fileUrl = data?.data?.fileUrl;
 
   const parsedUrl = fileUrl ? parseFileUrl(fileUrl) : null;
   const { fileName } = parsedUrl || {};
 
-  const { data: fileData } = useGetPostFileQuery(fileName);
+  const { data: fileData } = useGetPostFileQuery(fileName?fileName:"");
 
   const handleBack = () => {
     navigate(-1);

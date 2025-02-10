@@ -13,28 +13,31 @@ const CreatePost = () => {
   const [createPost] = useCreatePostMutation();
   const [uploadMode, setUploadMode] = useState("file");
   const [language, setLanguage] = useState("c");
-  const { userName, userEmail, userId } = useAppSelector(useCurrentUser);
+  const currentUser = useAppSelector(useCurrentUser);
+  const userName = currentUser?.userName || '';
+  const userEmail = currentUser?.userEmail || '';
+  const userId = currentUser?.userId || '';
 
   console.log(userName);
 
-  const handleCreatePost = async (e) => {
+  const handleCreatePost = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
 
     const form = e.target;
 
     try {
-      const headLine = form.headLine.value;
-      const content = form.content.value;
+      const headLine = (form as HTMLFormElement).headLine.value;
+      const content = (form as HTMLFormElement).content.value;
       let file = null;
 
       // Check if file upload mode is selected and if a file is provided
-      if (uploadMode === "file" && form.file?.files?.length > 0) {
-        file = form.file.files[0];
+      if (uploadMode === "file" && (form as HTMLFormElement).file?.files?.length > 0) {
+        file = (form as HTMLFormElement).file.files[0];
       }
       // Check if code snippet mode is selected and if content is provided
-      else if (uploadMode === "snippet" && form.codeSnippet?.value) {
-        const codeContent = form.codeSnippet.value;
+      else if (uploadMode === "snippet" && (form as HTMLFormElement).codeSnippet?.value) {
+        const codeContent = (form as HTMLFormElement).codeSnippet.value;
         const fileExtension =
           language === "c" ? ".c" : language === "java" ? ".java" : ".py";
         file = new File([codeContent], `snippet${fileExtension}`, {

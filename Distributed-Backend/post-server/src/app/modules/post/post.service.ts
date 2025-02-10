@@ -101,7 +101,7 @@ import config from '../../config';
 const fetchUserDetails = async (userId: string) => {
   try {
     const response = await axios.get(
-      `http://user-service:5001/api/v1/user/${userId}`,
+      `http://user-service/api/v1/user/${userId}`,
       {
         headers: {
           'x-api-key': config.USER_SERVICE_API_KEY,
@@ -134,7 +134,7 @@ const createPostIntoDB = async (payload: TPost) => {
       };
 
       const response = await axios.post(
-        'http://notification-service:5003/api/v1/notification/create-Notification',
+        'http://notification-service/api/v1/notification/create-Notification',
         notificationPayload,
         {
           headers: {

@@ -53,18 +53,18 @@ const NavBar: React.FC = () => {
     };
   }, [debouncedFetch]);
 
-  const handlePostRedirect = (id) => {
+  const handlePostRedirect = (id: string) => {
     navigate(`/post/${id}`);
   };
 
-  const handleNotificationSeen = async (item) => {
+  const handleNotificationSeen = async (item: { _id: string; seenUser: string[]; postId: { userEmail: string } }) => {
     try {
       await updateNotifications({
         id: item._id,
         data: { seenUser: [...item.seenUser, user?.userId] },
       });
       setSeenNotifications((prev) => new Set(prev).add(item._id));
-    } catch (error) {
+    } catch {
       message.error("Failed to update Notification.");
     }
   };
@@ -96,10 +96,10 @@ const NavBar: React.FC = () => {
       <div className="flex flex-col gap-3">
         {data?.data
           ?.filter(
-            (item) =>
+            (item: { _id: string; seenUser: string[]; isDeleted: boolean; postId: { userEmail: string } }) =>
               (!item.seenUser.includes(user?.userId) || item.isDeleted === false)&&item.postId.userEmail!==user?.userEmail
           )
-          .map((item) => (
+          .map((item: { _id: string; seenUser: string[]; isDeleted: boolean; postId: { userEmail: string; userName: string; _id: string }; headLine: string }) => (
             <button
               key={item._id}
               onClick={() => {

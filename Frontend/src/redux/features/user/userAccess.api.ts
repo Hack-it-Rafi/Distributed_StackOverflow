@@ -47,11 +47,11 @@ const userAccessApi = baseApi.injectEndpoints({
           body: data,
         };
       },
-      invalidatesTags: ["posts"],
+      // invalidatesTags: ["posts"],
     }),
 
     getAllNotifications: builder.query({
-      query: (args?) => ({
+      query: () => ({
         url: "/notification",
         method: "GET",
       }),
@@ -63,7 +63,7 @@ const userAccessApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: args.data,
       }),
-      invalidatesTags: ["notifications"],
+      invalidatesTags: [],
     }),
     
   }),

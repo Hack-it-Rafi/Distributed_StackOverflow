@@ -32,7 +32,7 @@ const auth = () => {
       // console.log("mail",userEmail);
 
 
-      const userServiceUrl = `http://user-service:5001/api/v1/user?email=${userEmail}`;
+      const userServiceUrl = `http://user-service/api/v1/user?email=${userEmail}`;
       const userResponse = await axios.get(userServiceUrl, {
         headers: {
           'x-api-key': config.USER_SERVICE_API_KEY,
